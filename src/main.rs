@@ -1,8 +1,7 @@
-mod id;
-use id::id_create::{hashing};
+mod hashing;
+use hashing::main::{hash_func};
 
 use rand::Rng;
-
 extern crate chrono;
 use chrono::Utc;
 
@@ -14,9 +13,10 @@ fn main() {
 	let	time = now.format("%Y%m%d%H%M%S").to_string();
 	let id_lim: i64 = 40;
 
-	println!("{:?}", id_lim);
+	let txt: String = "hello".to_string();
+	let hashed: String = hash_func(txt); // mod hashing.rs
 
-	hashing();
+	println!("{:?}", hashed);
 }
 
 
