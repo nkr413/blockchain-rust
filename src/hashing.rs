@@ -1,13 +1,20 @@
 pub mod main {
-	use sha2::{Sha256, Sha512, Digest};
+	pub use sha2::{Sha512, Digest};
 
-	pub fn hash_func(txt: String) -> String {
+	//mod main_struct;
+	//use main_struct::struct_mod::BaseMain;
+
+	pub fn hash_func(arg: String) -> String {
 		let mut hasher = Sha512::new();
-		hasher.update(txt);
+		hasher.update(arg);
 
 		let result = hasher.finalize();
 		let hashed = hex::encode(result);
 
 		return hashed;
 	}
+
+	// pub fn test(arg: Struct) {
+	// 	println!("{:?}", arg);
+	// }
 }
