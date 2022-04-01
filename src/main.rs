@@ -2,12 +2,40 @@
 extern crate chrono;
 use chrono::Utc;
 
-// IMPORT
-mod hashing; 
-use hashing::main::{hash_func};
+use std::fs;
+use std::fs::{File, OpenOptions};
+use std::io::prelude::*;
+use std::path::Path;
 
-mod main_struct;
-use main_struct::struct_mod::BaseMain;
+use sha2::{Sha512, Digest};
+// PACKAGES
+
+
+#[derive(Debug)]
+struct BaseMain 
+{
+	time: String,
+	num: i64
+}
+
+impl BaseMain {
+	fn hash_func(&self, arg: String) -> String {
+		let mut hasher = Sha512::new();
+		hasher.update(arg);
+
+		let result = hasher.finalize();
+		let hashed = hex::encode(result);
+
+		return hashed;
+	}
+
+	fn test(&self) {
+		match fs::create_dir("./data") {
+			Err(why) => println!("! {:?}", why.kind()),
+			Ok(_) => {},
+		}
+	}
+}
 
 
 fn main() {
@@ -17,11 +45,10 @@ fn main() {
 	};
 
 	let txt: String = "1hello".to_string();
-	let hashed: String = hash_func(txt); // mod hashing.rs
+	let hashed: String = base.hash_func(txt); // mod hashing.rs
 
-	//test(base);
 
-	println!("{:?}", base);
+	println!("{:?}", hashed);
 }
 
 
