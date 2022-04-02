@@ -7,7 +7,7 @@ use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
 use std::path::Path;
 
-use sha2::{Sha512, Digest};
+use sha2::{Sha256, Digest}; // SHA-516
 // PACKAGES
 
 
@@ -34,7 +34,7 @@ impl BaseMain {
 	}
 
 	fn hash_func(&self, arg: String) -> String {
-		let mut hasher = Sha512::new();
+		let mut hasher = Sha256::new();
 		hasher.update(arg);
 
 		let result = hasher.finalize();
@@ -43,8 +43,9 @@ impl BaseMain {
 		return hashed;
 	}
 
+	#[warn(dead_code)]
 	fn test(&self) {
-		match fs::create_dir("./data/base.json") {
+		match fs::create_dir("./data") {
 			Err(why) => println!("! {:?}", why.kind()),
 			Ok(_) => {},
 		}
@@ -61,12 +62,41 @@ fn zero_block() -> BaseMain {
 }
 
 
+fn input(rsp: &str) -> String {
+
+	if rsp == "/start"
+	{
+		return String::from("true");
+	}
+
+	else if rsp == "/print"
+	{
+		return String::from("false");
+	}
+
+	else { return String::from("none"); }
+}
+
+
 fn main() {
 	let mut block = zero_block();
 
-	block.hash = block.hash_func(format!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num));
+	//println!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num);
 
-	println!("{:#?}", block);
+	//block.hash = block.hash_func(format!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num));
+
+	//println!("{:#?}", block);
+
+	println!("Enter -> ");
+
+	let mut resp = String::new();
+	std::io::stdin()
+		.read_line(&mut resp)
+		.expect("Failes");
+
+	let x = input(&resp[0..&resp.len() - 2]);
+
+	println!("{:?}", x);
 }
 
 
