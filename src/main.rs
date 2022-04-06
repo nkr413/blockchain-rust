@@ -2,6 +2,8 @@
 extern crate chrono;
 use chrono::Utc;
 
+extern crate serde;
+
 use std::fs;
 use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
@@ -10,9 +12,8 @@ use std::path::Path;
 use sha2::{Sha256, Digest}; // SHA-516
 // PACKAGES
 
-
 #[derive(Debug)]
-struct BaseMain 
+struct BaseMain
 {
 	hash: String,
 	prev_hash: String,
@@ -62,31 +63,41 @@ fn zero_block() -> BaseMain {
 }
 
 
-fn input(rsp: &str) -> String {
+fn input(rsp: &str) {
 
-	if rsp == "/start"
-	{
-		return String::from("true");
+	if rsp == "/start" {
+		println!("- Start");
 	}
 
-	else if rsp == "/print"
-	{
-		return String::from("false");
+	else if rsp == "/print" {
+		println!("- Print");
 	}
 
-	else { return String::from("none"); }
+	else if rsp == "/zero" {
+		let mut block = zero_block();
+
+		//println!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num);
+
+		block.hash = block.hash_func(format!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num));
+
+		println!("{:?}", block);
+	}
+
+	else if rsp == "/file" {
+    let file = fs::File::open("./data.json").expect("file should open read only");
+
+    let json: serde_json::Value = serde_json::from_reader(file).expect("file should be proper JSON");
+
+    let first = json.get("users").expect("file should have FirstName key");
+
+    println!("{:?}", first[0]);
+	}
+
+	else { println!("none"); }
 }
 
 
 fn main() {
-	let mut block = zero_block();
-
-	//println!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num);
-
-	//block.hash = block.hash_func(format!("{}-{}-{}-{}", block.hash, block.prev_hash, block.time, block.num));
-
-	//println!("{:#?}", block);
-
 	println!("Enter -> ");
 
 	let mut resp = String::new();
@@ -94,9 +105,7 @@ fn main() {
 		.read_line(&mut resp)
 		.expect("Failes");
 
-	let x = input(&resp[0..&resp.len() - 2]);
-
-	println!("{:?}", x);
+	input(&resp[0..&resp.len() - 2]);
 }
 
 

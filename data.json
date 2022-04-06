@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "id": 448701,
+      "name": "Elon",
+      "surname": "Musk",
+      "username": "@spacex",
+      "password": "0987",
+      "wallet": 1000
+    },
+    {
+      "id": 590306,
+      "name": "Kamronbek",
+      "surname": "Narkuziev",
+      "username": "@nkr413",
+      "password": "1234",
+      "wallet": 500
+    }
+  ]
+}
